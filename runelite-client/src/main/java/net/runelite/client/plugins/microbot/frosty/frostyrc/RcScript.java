@@ -201,7 +201,15 @@ public class RcScript extends Script {
 			if (BreakHandlerScript.breakIn <= 0) return;
 		}
 
-        if (Rs2Inventory.anyPouchUnknown()) {
+		Rs2Tab.switchToInventoryTab();
+
+		if (Rs2Inventory.hasDegradedPouch()) {
+			Rs2Magic.repairPouchesWithLunar();
+			sleepGaussian(900, 200);
+			return;
+		}
+
+		if (Rs2Inventory.anyPouchUnknown()) {
             checkPouches();
         }
 
