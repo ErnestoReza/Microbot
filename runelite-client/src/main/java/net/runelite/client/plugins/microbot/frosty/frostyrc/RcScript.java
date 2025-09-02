@@ -194,11 +194,9 @@ public class RcScript extends Script {
             }
         }
 
-        Rs2Tab.switchToInventoryTab();
-
-		if (plugin.isBreakHandlerEnabled()) {
-			BreakHandlerScript.setLockState(false);
-			if (BreakHandlerScript.breakIn <= 0) return;
+		BreakHandlerScript.setLockState(false);
+		if (BreakHandlerScript.isBreakActive() || BreakHandlerScript.breakIn <= 0) {
+			return;
 		}
 
 		Rs2Tab.switchToInventoryTab();
