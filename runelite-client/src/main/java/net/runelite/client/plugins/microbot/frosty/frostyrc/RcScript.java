@@ -101,6 +101,7 @@ public class RcScript extends Script {
             try {
                 if (!Microbot.isLoggedIn()) return;
                 if (!super.run()) return;
+                if (shouldPauseForBreak()) return;
                 long startTime = System.currentTimeMillis();
 
                 if (lumbyElite == -1) {
@@ -160,6 +161,23 @@ public class RcScript extends Script {
         //Rs2Player.logout();
     }
 
+    private boolean shouldPauseForBreak() {
+        if (!plugin.isBreakHandlerEnabled()) {
+            return false;
+        }
+
+        if (BreakHandlerScript.isBreakActive()) {
+            return true;
+        }
+
+        if (BreakHandlerScript.breakIn <= 0) {
+            BreakHandlerScript.setLockState(false);
+            return true;
+        }
+
+        return false;
+    }
+
     private void checkPouches() {
         Rs2Inventory.interact(colossalPouch, "Check");
         sleepGaussian(900, 200);
@@ -178,6 +196,11 @@ public class RcScript extends Script {
 
         Rs2Tab.switchToInventoryTab();
 
+		if (plugin.isBreakHandlerEnabled()) {
+			BreakHandlerScript.setLockState(false);
+			if (BreakHandlerScript.breakIn <= 0) return;
+		}
+
         if (Rs2Inventory.anyPouchUnknown()) {
             checkPouches();
         }
@@ -195,10 +218,6 @@ public class RcScript extends Script {
         }
         if (!config.usePoh()) {
             handleFeroxRunEnergy();
-        }
-
-        if (plugin.isBreakHandlerEnabled()) {
-            BreakHandlerScript.setLockState(false);
         }
 
         while (!Rs2Bank.isOpen() && isRunning() &&
@@ -718,10 +737,6 @@ public class RcScript extends Script {
         }
 
 		handleFeroxRunEnergy();
-
-		if (plugin.isBreakHandlerEnabled()) {
-			BreakHandlerScript.setLockState(false);
-		}
 
         state = State.BANKING;
     }
