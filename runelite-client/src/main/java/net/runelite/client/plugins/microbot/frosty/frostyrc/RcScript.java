@@ -211,12 +211,6 @@ public class RcScript extends Script {
             checkPouches();
         }
 
-        if (Rs2Inventory.hasDegradedPouch()) {
-            Rs2Magic.repairPouchesWithLunar();
-            sleepGaussian(900, 200);
-            return;
-        }
-
         if (Rs2Inventory.isFull() && Rs2Inventory.allPouchesFull() && Rs2Inventory.contains(pureEss)) {
             Microbot.log("We are full, skipping bank");
             state = State.GOING_HOME;
@@ -743,6 +737,8 @@ public class RcScript extends Script {
         }
 
 		handleFeroxRunEnergy();
+
+		BreakHandlerScript.setLockState(false);
 
         state = State.BANKING;
     }
